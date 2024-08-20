@@ -1,16 +1,28 @@
+# VortiQ-Project-Website
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
 First, run the development server:
 
+npm:
 ```bash
 npm run dev
-# or
+```
+
+yarn:
+```bash
 yarn dev
-# or
+```
+
+pnpn:
+```bash
 pnpm dev
-# or
+```
+
+bun:
+```bash
 bun dev
 ```
 
