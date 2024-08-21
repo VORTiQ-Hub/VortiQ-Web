@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { SignOutButton } from "@/components/auth/sign-out-button";
 
 // Server-side Components
 import { userCheck } from "@/actions/user-check";
@@ -14,6 +15,7 @@ const Adminlayout = ( {children}: {children: React.ReactNode} ) => {
     useEffect(() => {
         userCheck().then((data) => {
             if (data.error) {
+                console.log(data.error);
                 setError(data.error);
                 router.push("/auth/login");
             } else {
@@ -29,7 +31,15 @@ const Adminlayout = ( {children}: {children: React.ReactNode} ) => {
 
     if (role === "admin") {
         return (
-            <div>{children}</div>
+            <div className="flex flex-col">
+                <div className="flex justify-between items-center px-4 py-2">
+                    <h1>User Layout</h1>
+                    <SignOutButton />
+                </div>
+                <div>
+                    {children}
+                </div>
+            </div>
         );
     }
 }
