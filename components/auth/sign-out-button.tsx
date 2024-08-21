@@ -3,7 +3,7 @@
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/firebase";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export const SignOutButton = () => {
     const route = useRouter();
@@ -12,6 +12,8 @@ export const SignOutButton = () => {
             signOut(auth).then(() => {
                 route.push("/");
             });
+        } catch (error) {
+            console.error(error);
         }
     }
     return (
