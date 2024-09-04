@@ -8,17 +8,17 @@ const services = [
   { title: 'Battery Storage', description: 'Reliable energy storage solutions', icon: '/images/battery.png' },
 ];
 
-const Page: React.FC = () => (
-  <div className="bg-gray-100 min-h-screen">l
-    <Header />
-    <section className="container mx-auto py-16">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {services.map((service, index) => (
-          <ServiceCard key={index} {...service} />
-        ))}
-      </div>
-    </section>
-  </div>
-);
-
-export default Page;
+export default function Home() {
+    return (    
+    <div className="bg-gray-100 min-h-screen">l
+        <Header />
+        <section className="container mx-auto py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {services.map((service, index) => (
+            <ServiceCard key={index} {...service} />
+            ))}
+        </div>
+        </section>
+    </div>
+    );
+}
