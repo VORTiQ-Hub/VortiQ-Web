@@ -17,7 +17,7 @@ export const Header = ({ label }: HeaderProps) => {
                 "text-4xl font-semibold",
                 font.className
             )}>
-                🔐 Auth
+                Vortiq Auth 🔐
             </h1>
             <p className="text-muted-foreground text-sm">
                 {label}
