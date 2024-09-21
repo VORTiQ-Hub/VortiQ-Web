@@ -9,17 +9,17 @@ import { LayoutDashboard, ShoppingCart, Users, BarChart, Settings, HelpCircle, M
 import Image from 'next/image'
 
 const navItems = [
-  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'Orders', href: '/orders', icon: ShoppingCart },
-  { name: 'Customers', href: '/customers', icon: Users },
-  { name: 'Analytics', href: '/analytics', icon: BarChart },
-  { name: 'Settings', href: '/settings', icon: Settings },
-  { name: 'Help', href: '/help', icon: HelpCircle },
+  { name: 'Dashboard', href: '/user/dashboard', icon: LayoutDashboard },
+  { name: 'Orders', href: '/user/orders', icon: ShoppingCart },
+  { name: 'Customers', href: '/user/customers', icon: Users },
+  { name: 'Analytics', href: '/user/analytics', icon: BarChart },
+  { name: 'Settings', href: '/user/settings', icon: Settings },
+  { name: 'Help', href: '/user/help', icon: HelpCircle },
 ]
 
 export default function UserSidePanel() {
-  const [open, setOpen] = useState(false)
-  const pathname = usePathname()
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   interface NavItem {
     name: string;
@@ -27,25 +27,19 @@ export default function UserSidePanel() {
     icon: React.ComponentType<{ className?: string }>;
   }
 
-  const NavLink = ({ item }: { item: NavItem }) => (
-    <Link
-      href={item.href}
-      className={cn(
-        "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50",
-        pathname === item.href ? "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-50" : ""
-      )}
-    >
+  const NavLink = ({ item}: { item: NavItem }) => (
+    <Link href={item.href} className={cn("flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50", pathname === item.href ? "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-50" : "")} >
       <item.icon className="h-4 w-4" />
       {item.name}
     </Link>
   )
 
   const SidebarContent = () => (
-    <div className="flex h-full flex-col gap-4">
+    <div className="flex min-h-screen flex-col gap-4">
       <div className="flex h-[60px] items-center border-b px-6">
         <Link className="flex items-center gap-2 font-semibold" href="#">
           <LayoutDashboard className="h-6 w-6" />
-          <span className="">Admin Dashboard</span>
+          <span className="">User Dashboard</span>
         </Link>
       </div>
       <ScrollArea className="flex-1 px-3">
@@ -57,17 +51,7 @@ export default function UserSidePanel() {
       </ScrollArea>
       <div className="mt-auto p-4">
         <div className="flex items-center gap-4 rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
-          <Image
-            alt="Avatar"
-            className="rounded-full"
-            height="40"
-            src="/placeholder.svg?height=40&width=40"
-            style={{
-              aspectRatio: "40/40",
-              objectFit: "cover",
-            }}
-            width="40"
-          />
+          <Image alt="Avatar" className="rounded-full" height="40" src="/placeholder.svg?height=40&width=40" style={{ aspectRatio: "40/40", objectFit: "cover" }} width="40" />
           <div className="flex flex-col">
             <span className="text-sm font-medium">John Doe</span>
             <span className="text-xs text-gray-500 dark:text-gray-400">john@example.com</span>
@@ -95,4 +79,4 @@ export default function UserSidePanel() {
       </div>
     </>
   )
-}   
+}
