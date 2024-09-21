@@ -1,6 +1,8 @@
 import React from 'react';
 import Header from '../components/Header';
 import ServiceCard from '../components/ServiceCard';
+import Navbar from '@/components/Navbar/Navbar';
+import Footer from '@/components/Footer/Footer';
 
 const services = [
   { title: 'Solar Panels', description: 'Efficient solar panel installations', icon: '/images/solar-panel.png' },
@@ -10,15 +12,19 @@ const services = [
 
 export default function Home() {
     return (    
-    <div className="bg-gray-100 min-h-screen">l
-        <Header />
-        <section className="container mx-auto py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-            <ServiceCard key={index} {...service} />
-            ))}
+        <div className="bg-gray-100">
+            <div className="fixed w-full">
+                <Navbar />
+            </div>
+            <Header />
+            <section className="container mx-auto py-16 min-h-screen">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {services.map((service, index) => (
+                        <ServiceCard key={index} {...service} />
+                    ))}
+                </div>
+            </section>
+            <Footer />
         </div>
-        </section>
-    </div>
     );
 }
