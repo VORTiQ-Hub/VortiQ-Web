@@ -6,8 +6,10 @@ import { SignOutButton } from "@/components/auth/sign-out-button";
 
 // Server-side Components
 import { userCheck } from "@/actions/user-check";
+import { User } from "lucide-react";
+import UserSidePanel from "@/components/Navbar/User/UserSidePanel";
 
-const Adminlayout = ( {children}: {children: React.ReactNode} ) => {
+const Userlayout = ( {children}: {children: React.ReactNode} ) => {
     const router = useRouter();
     const [role, setRole] = useState<string | undefined>("");
     const [error, setError] = useState<string | undefined>("");
@@ -29,14 +31,14 @@ const Adminlayout = ( {children}: {children: React.ReactNode} ) => {
         });
     }, [router]);
 
-    if (role === "admin") {
+    if (role === "user") {
         return (
-            <div className="flex flex-col">
-                <div className="flex justify-between items-center px-4 py-2">
-                    <h1>User Layout</h1>
-                    <SignOutButton />
-                </div>
-                <div>
+            <div className="flex">
+                <UserSidePanel />
+                <div className="flex flex-col w-full">
+                    <div className="min-h-[60px] w-full flex justify-end items-center px-6 border-b">
+                        <SignOutButton />
+                    </div>
                     {children}
                 </div>
             </div>
@@ -44,4 +46,4 @@ const Adminlayout = ( {children}: {children: React.ReactNode} ) => {
     }
 }
 
-export default Adminlayout;
+export default Userlayout;

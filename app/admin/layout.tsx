@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 
 // Server-side Components
 import { userCheck } from "@/actions/user-check";
-import { SignOutButton } from "@/components/auth/sign-out-button";
+import AdminSidePanel from "@/components/Navbar/Admin/AdminSidePanel";
+import NavTop from "@/components/Navbar/nav-top";
 
 const Adminlayout = ( {children}: {children: React.ReactNode} ) => {
     const router = useRouter();
@@ -30,12 +31,10 @@ const Adminlayout = ( {children}: {children: React.ReactNode} ) => {
 
     if (role === "admin") {
         return (
-            <div className="flex flex-col">
-                <div className="flex justify-between items-center px-4 py-2">
-                    <h1>Admin Layout</h1>
-                    <SignOutButton />
-                </div>
-                <div>
+            <div className="flex">
+                <AdminSidePanel />
+                <div className="flex flex-col w-full">
+                    <NavTop />
                     {children}
                 </div>
             </div>
