@@ -12,6 +12,8 @@ const Adminlayout = ( {children}: {children: React.ReactNode} ) => {
     const router = useRouter();
     const [role, setRole] = useState<string | undefined>("");
     const [error, setError] = useState<string | undefined>("");
+    const [user,setUser] = useState<string | undefined>("");
+    const [email,setEmail] = useState<string | undefined>("");
 
     useEffect(() => {
         userCheck().then((data) => {
@@ -23,6 +25,8 @@ const Adminlayout = ( {children}: {children: React.ReactNode} ) => {
                     setError("You are not authorized to view this page");
                     router.push("/user");
                 } else {
+                    setUser(data.name);
+                    setEmail(data.email);
                     setRole(data.role);
                 }
             }
@@ -32,7 +36,7 @@ const Adminlayout = ( {children}: {children: React.ReactNode} ) => {
     if (role === "admin") {
         return (
             <div className="flex">
-                <AdminSidePanel />
+                <AdminSidePanel name={user || ""} email={email || ""} />
                 <div className="flex flex-col w-full">
                     <NavTop />
                     {children}
