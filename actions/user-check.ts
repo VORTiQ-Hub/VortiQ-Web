@@ -11,7 +11,9 @@ export const userCheck = async () => {
         if (docSnap.exists()) {
             const userData = docSnap.data();
             const userType = userData?.usertype;
-            return { success: "User data found!", role: userType };
+            const userName = userData?.name;
+            const userEmail = userData?.email;
+            return { success: "User data found!", role: userType, name: userName, email: userEmail };
         } else {
             return { error: "User data not found in Firestore" };
         }

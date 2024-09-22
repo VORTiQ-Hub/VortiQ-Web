@@ -22,6 +22,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
             timestamp: serverTimestamp()
         });
     } catch (error) {
+        console.log(error);
         return { error: "Error" };
     }
 
