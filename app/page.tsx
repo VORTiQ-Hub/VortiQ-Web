@@ -13,7 +13,7 @@ const services = [
 export default function Home() {
     return (    
         <div className="bg-gray-100">
-            <div className="fixed w-full">
+            <div className="fixed w-full z-20">
                 <Navbar />
             </div>
             <Header />

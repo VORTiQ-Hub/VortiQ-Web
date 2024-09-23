@@ -78,8 +78,8 @@ export default function AdminCustomersPage() {
                 </div>
             </div>
             {data && data.length === 0 && (
-                <div className="text-center mt-5">
-                    <div>
+                <div className="text-center p-5">
+                    <div className="flex justify-center items-center gap-10">
                         <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status"></div>
                         <span className="visually-hidden">Loading...</span>
                     </div>
