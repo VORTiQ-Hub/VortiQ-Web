@@ -1,45 +1,41 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { fetchUser } from "@/actions/fetchUser";
 import { useForm } from "react-hook-form";
 import { updateDoc, doc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
 
-export default function EditCustomerPage() {
-    const searchParams = useSearchParams();
-    const userId = searchParams.get("id") || "";
-    const [data, setData] = useState<any>({});
-    const { register, handleSubmit, setValue } = useForm();
+interface UserData {
+    name: string;
+    email: string;
+    usertype: string;
+}
+
+export default function Page({ params }: { params: { id: string } }) {
+    const [data, setData] = useState<UserData | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const { register, handleSubmit, setValue } = useForm<UserData>();
     const router = useRouter();
 
     useEffect(() => {
-        if (!userId) {
-            // Handle the case where userId is not found
-            console.log("User ID is missing");
-            return; // Optionally, redirect or show an error
-        }
-
-        fetchUser({ id: userId }).then((response) => {
+        fetchUser({ id: params.id }).then((response) => {
             if (response.success) {
                 setData(response.data);
                 setValue("name", response.data.name);
                 setValue("email", response.data.email);
                 setValue("usertype", response.data.usertype);
             } else {
-                console.log(response.error);
-                // Optionally handle error (e.g., show a message)
+                setError(response.error ?? "An unknown error occurred");
             }
         });
-    }, [userId, setValue]);
+    }, [params.id, setValue]);
 
-    const updateCustomer = async (formData: { name: string; email: string; usertype: string; }) => {
-        console.log("Update Customer", formData);
-        console.log("User ID", userId);
+    const updateCustomer = async (formData: UserData) => {
         try {
-            const dataRef = doc(db, 'users', userId);
+            const dataRef = doc(db, 'users', params.id);
             const response = {
                 name: formData.name,
                 email: formData.email,
@@ -57,16 +53,16 @@ export default function EditCustomerPage() {
     return (
         <div className="p-3">
             <div className="text-center">Edit Customer</div>
+            {error && <p className="text-red-500">{error}</p>}
             <div className="flex flex-col items-center justify-center h-full">
-                {/* <form onSubmit={handleSubmit(updateCustomer)} className="flex flex-col space-y-3"> */}
-                <form className="flex flex-col space-y-3">
+                <form onSubmit={handleSubmit(updateCustomer)} className="flex flex-col space-y-3">
                     <div className="mb-3 gap-2">
                         <label htmlFor="name" className="mr-2">Name: </label>
-                        <input type="text" className="bg-transparent" id="name" {...register("name")} />
+                        <input type="text" className="bg-transparent" id="name" {...register("name", { required: true })} />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="email" className="mr-2">Email: </label>
-                        <input type="email" className="bg-transparent" id="email" {...register("email")} />
+                        <input type="email" className="bg-transparent" id="email" {...register("email", { required: true })} />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="usertype" className="mr-2">User Type: </label>
@@ -75,7 +71,7 @@ export default function EditCustomerPage() {
                             <option value="user">User</option>
                         </select>
                     </div>
-                    <div className="text-end gap-2">
+                    <div className="flex flex-col gap-4">
                         <Button type="submit">Update</Button>
                         <Button type="button" onClick={() => router.push('/admin/customers')}>No updates Needed</Button>
                     </div>
