@@ -7,8 +7,7 @@ interface User {
     id: string;
     name: string;
     email: string;
-    password: string;
-    userType: string;
+    usertype: string;
 }
 
 export const fetchAllUsers = async () => {
@@ -23,14 +22,18 @@ export const fetchAllUsers = async () => {
                 id: doc.id,
                 name: data.name,
                 email: data.email,
-                password: data.password,
-                userType: data.usertype
+                usertype: data.usertype
             };
             users.push(user);  // Push each user's data along with the document ID
         });
         
         return { success: "All users data fetched!", data: users };
     } catch (error) {
-        return { error: "Failed to fetch users data", details: error };
+        let errorMessage = "Failed to fetch users data";
+        if (error instanceof Error) {
+            errorMessage = error.message; // More specific error message
+        }
+        console.error("Error fetching users data:", error);
+        return { error: errorMessage, details: error };
     }
 };

@@ -19,8 +19,7 @@ interface User {
     id: string;
     name: string;
     email: string;
-    password: string;
-    userType: string;
+    usertype: string;
 };
 
 export default function AdminCustomersPage() {
@@ -50,7 +49,7 @@ export default function AdminCustomersPage() {
     // Edit User
     const editUser = (id: string) => {
         console.log("Edit User", id);
-        router.push(`/admin/customers/edit?id=${id}`);
+        router.push(`/admin/customers/edit/${id}`);
     }
 
     return (
@@ -70,7 +69,6 @@ export default function AdminCustomersPage() {
                         <TableHead>User Type</TableHead>
                         <TableHead>Full Name</TableHead>
                         <TableHead>Email</TableHead>
-                        <TableHead>Password</TableHead>
                         <TableHead>Actions</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -79,11 +77,10 @@ export default function AdminCustomersPage() {
                         <TableRow key={index} className="even:bg-gray-50 even:dark:bg-slate-600">
                             <TableCell>{user.id}</TableCell>
                             <TableCell>
-                                <UserType type={user.userType} />
+                                <UserType type={user.usertype} />
                             </TableCell>
                             <TableCell>{user.name}</TableCell>
                             <TableCell>{user.email}</TableCell>
-                            <TableCell>{user.password}</TableCell>
                             <TableCell className="gap-2 flex">
                                 <Edit onClick={() => editUser(user.id)} className="cursor-pointer" />
                                 <Trash2 onClick={() => deleteUser(user.id)} className="cursor-pointer" />

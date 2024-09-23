@@ -28,6 +28,6 @@ export const fetchUser = async ({ id }: { id: string }) => {
             return { error: "User data not found in Firestore" }
         }
     } catch (error) {
-        return { error: "Error fetching user data" }
+        return { error: "error" }
     }
 }
