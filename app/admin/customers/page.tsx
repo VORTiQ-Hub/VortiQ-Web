@@ -1,18 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Trash2 , Edit, UserPlus } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 // Server-side Components
-import { fetchAllUsers } from "@/actions/fetchdata-users";
 import UserType from "@/components/userType";
 
 // Firebase
-import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/firebase/firebase";
+import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 
 // User Interface
 interface User {
@@ -27,20 +26,37 @@ export default function AdminCustomersPage() {
     const router = useRouter();
 
     // Fetch Data From Firebase
-    useEffect(() => {
-        fetchAllUsers().then((data) => {
-            if (data.success) {
-                setData(data.data);
-                console.log(data.success);
+    const fetchUsers = async () => {
+        const userRef = collection(db, "users");
+        try {
+            const querySnapshot = await getDocs(userRef);
+            const users = querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                name: doc.data().name,
+                email: doc.data().email,
+                usertype: doc.data().usertype,
+            }));
+            setData(users);
+        } catch (error) {
+            let errorMessage = "Failed to fetch users data";
+            if (error instanceof Error) {
+                errorMessage = error.message; // More specific error message
             }
-        });
+            console.log("Error fetching users data:", errorMessage);
+        }
+    };
+
+    useEffect(() => {    
+        fetchUsers();
     }, []);
+    
 
     // Delete User
     const deleteUser = async(id: string) => {
         try {
             await deleteDoc(doc(db, 'users', id));
             console.log("User Deleted");
+            fetchUsers();
         } catch (error) {
             console.error("Error Deleting User", error);
         }
@@ -61,6 +77,15 @@ export default function AdminCustomersPage() {
                     <Button type="button" onClick={() => router.push('/admin/customers/add')} className="text-end gap-2"><UserPlus />Add Customer</Button>
                 </div>
             </div>
+            {data && data.length === 0 && (
+                <div className="text-center p-5">
+                    <div className="flex justify-center items-center gap-10">
+                        <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status"></div>
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <div>Loading Customers</div>
+                </div>
+            )}
             <Table>
                 <TableCaption>Customers</TableCaption>
                 <TableHeader>
