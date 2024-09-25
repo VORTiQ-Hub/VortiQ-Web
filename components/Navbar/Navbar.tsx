@@ -10,7 +10,7 @@ export default function Navbar(){
             <div className="flex justify-center items-center gap-4 text-black dark:text-white">
                 <Link href="/" className="text-white text-lg font-bold hover:text-gray-600" >Home</Link>
                 <Link href="/" className="text-white text-lg font-bold hover:text-gray-600" >Contact</Link>
-                <Link href="/" className="text-white text-lg font-bold hover:text-gray-600" >Team</Link>
+                <Link href="/team" className="text-white text-lg font-bold hover:text-gray-600" >Team</Link>
             </div>
             
             <div className="flex justify-center items-center gap-4 text-black dark:text-white">
