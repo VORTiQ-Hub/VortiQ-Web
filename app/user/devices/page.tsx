@@ -53,11 +53,11 @@ export default function Device() {
     });
 
     return (
-        <div className="flex h-full w-full flex-col bg-muted/40">
+        <div className="flex h-full w-full flex-col bg-muted/40 p-3">
             <header className="sticky top-0 z-30 py-5 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
                 <div className="flex items-center gap-2 text-lg font-semibold sm:text-base">
                     <NetworkIcon className="w-6 h-6" />
-                    <span>Device Dashboard</span>
+                    <span className="text-2xl font-semibold">Device Dashboard</span>
                 </div>
                 <div className="relative ml-auto flex-1 md:grow-0">
                     <div className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -89,7 +89,7 @@ export default function Device() {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </header>
-            <div className="flex w-full justify-center items-center">
+            <div className="flex w-full justify-center items-center px-4 sm:px-6">
                 <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8">
                     {filteredDevices.map(device => (
                         <Card key={device.id}>

@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
-import { LayoutDashboard, Users, Menu } from 'lucide-react'
+import { LayoutDashboard, Users, Menu, Settings } from 'lucide-react'
 
 const navItems = [
     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
     { name: 'Customers', href: '/admin/customers', icon: Users },
+    { name: 'Settings', href: '/admin/settings', icon: Settings },
 ]
 
 interface AdminSidePanelProps {

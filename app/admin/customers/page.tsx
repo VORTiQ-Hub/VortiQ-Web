@@ -72,7 +72,7 @@ export default function AdminCustomersPage() {
         <div className="p-3">
             <div className="grid grid-cols-3">
                 <div></div>
-                <div className="text-center">Admin Customers</div>
+                <h1 className='text-2xl font-semibold text-center'>Customers</h1>
                 <div className="text-end">
                     <Button type="button" onClick={() => router.push('/admin/customers/add')} className="text-end gap-2"><UserPlus />Add Customer</Button>
                 </div>
