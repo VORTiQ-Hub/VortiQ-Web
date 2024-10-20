@@ -1,22 +1,23 @@
 "use client";
 
 import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { ComputerIcon, File, LaptopIcon, NetworkIcon, SmartphoneIcon, TabletIcon } from "lucide-react";
 import Status from "@/components/status";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { ComputerIcon, File, NetworkIcon, School } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 const initialDevices = [
-    { id: 1, name: "Desktop 1", ip: "192.168.1.100", type: "Desktop", status: "Active" },
-    { id: 2, name: "Laptop 1", ip: "192.168.1.101", type: "Laptop", status: "Active" },
-    { id: 3, name: "Mobile 1", ip: "192.168.1.102", type: "Mobile", status: "Active" },
-    { id: 4, name: "Tablet 1", ip: "192.168.1.103", type: "Tablet", status: "Active" },
-    { id: 5, name: "Desktop 2", ip: "192.168.1.104", type: "Desktop", status: "Active" },
-    { id: 6, name: "Laptop 2", ip: "192.168.1.105", type: "Laptop", status: "Active" },
-    { id: 7, name: "Mobile 2", ip: "192.168.1.106", type: "Mobile", status: "Active" },
-    { id: 8, name: "Tablet 2", ip: "192.168.1.107", type: "Tablet", status: "Inactive" },
+    { id: 1, name: "Desktop 1", ip: "192.168.1.100", type: "Desktop", status: "Active", details: "Details about Desktop 1" },
+    { id: 2, name: "Laptop 1", ip: "192.168.1.101", type: "Laptop", status: "Active", details: "Details about Laptop 1" },
+    { id: 3, name: "Mobile 1", ip: "192.168.1.102", type: "Mobile", status: "Active", details: "Details about Mobile 1" },
+    { id: 4, name: "Tablet 1", ip: "192.168.1.103", type: "Tablet", status: "Active", details: "Details about Tablet 1" },
+    { id: 5, name: "Desktop 2", ip: "192.168.1.104", type: "Desktop", status: "Active", details: "Details about Desktop 2" },
+    { id: 6, name: "Laptop 2", ip: "192.168.1.105", type: "Laptop", status: "Active", details: "Details about Laptop 2" },
+    { id: 7, name: "Mobile 2", ip: "192.168.1.106", type: "Mobile", status: "Active", details: "Details about Mobile 2" },
+    { id: 8, name: "Tablet 2", ip: "192.168.1.107", type: "Tablet", status: "Inactive", details: "Details about Tablet 2" },
 ];
 
 export default function Device() {
@@ -26,6 +27,7 @@ export default function Device() {
         inactive: false,
         deviceTypes: new Set(["Desktop", "Laptop", "Mobile", "Tablet"]),
     });
+    const [selectedDevice, setSelectedDevice] = useState(null);
 
     const handleFilterChange = (type: string, checked: boolean) => {
         setFilters((prev) => {
@@ -51,6 +53,10 @@ export default function Device() {
         const isInType = filters.deviceTypes.has(device.type);
         return (isActive || isInactive) && isInType;
     });
+
+    const handleDeviceClick = (device) => {
+        setSelectedDevice(device);
+    };
 
     return (
         <div className="flex h-full w-full flex-col bg-muted/40 p-3">
@@ -92,12 +98,10 @@ export default function Device() {
             <div className="flex w-full justify-center items-center px-4 sm:px-6">
                 <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8">
                     {filteredDevices.map(device => (
-                        <Card key={device.id}>
+                        <Card key={device.id} onClick={() => handleDeviceClick(device)} className="cursor-pointer">
                             <CardHeader className="flex flex-row items-center gap-4">
                                 {device.type === "Desktop" && <ComputerIcon className="w-8 h-8" />}
-                                {device.type === "Laptop" && <LaptopIcon className="w-8 h-8" />}
-                                {device.type === "Mobile" && <SmartphoneIcon className="w-8 h-8" />}
-                                {device.type === "Tablet" && <TabletIcon className="w-8 h-8" />}
+                                {device.type === "Class" && <School className="w-8 h-8" />}
                                 <div className="grid gap-1">
                                     <CardTitle>{device.name}</CardTitle>
                                     <CardDescription>{device.ip}</CardDescription>
@@ -114,6 +118,22 @@ export default function Device() {
                     ))}
                 </div>
             </div>
+
+            {selectedDevice && (
+                <Dialog open={!!selectedDevice} onOpenChange={() => setSelectedDevice(null)}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>{selectedDevice.name}</DialogTitle>
+                            <DialogDescription>
+                                <p><strong>IP:</strong> {selectedDevice.ip}</p>
+                                <p><strong>Type:</strong> {selectedDevice.type}</p>
+                                <p><strong>Status:</strong> {selectedDevice.status}</p>
+                                <p><strong>Details:</strong> {selectedDevice.details}</p>
+                            </DialogDescription>
+                        </DialogHeader>
+                    </DialogContent>
+                </Dialog>
+            )}
         </div>
     );
 }
