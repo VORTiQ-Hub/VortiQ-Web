@@ -6,8 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ComputerIcon, File, NetworkIcon, School } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
+
 
 const initialDevices = [
     { id: 1, name: "Desktop 1", ip: "192.168.1.100", type: "Desktop", status: "Active", details: "Details about Desktop 1" },
@@ -27,7 +28,7 @@ export default function Device() {
         inactive: false,
         deviceTypes: new Set(["Desktop", "Laptop", "Mobile", "Tablet"]),
     });
-    const [selectedDevice, setSelectedDevice] = useState(null);
+    const [selectedDevice, setSelectedDevice] = useState<{ id: number; name: string; ip: string; type: string; status: string; details: string } | null>(null);
 
     const handleFilterChange = (type: string, checked: boolean) => {
         setFilters((prev) => {
@@ -54,7 +55,7 @@ export default function Device() {
         return (isActive || isInactive) && isInType;
     });
 
-    const handleDeviceClick = (device) => {
+    const handleDeviceClick = (device: { id: number; name: string; ip: string; type: string; status: string; details: string }) => {
         setSelectedDevice(device);
     };
 
