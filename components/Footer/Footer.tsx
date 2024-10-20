@@ -1,32 +1,34 @@
+import { Facebook, Linkedin, Twitter } from "lucide-react";
 import React from "react";
+import { FaWhatsapp } from "react-icons/fa6";
 
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-white pt-12 font-sans">
       <div className="container mx-auto flex flex-wrap justify-between px-10">
         <div className="footer-section mb-8 w-full md:w-1/3">
-          <h3 className="text-lg mb-5">Address</h3>
+          <h3 className="text-lg mb-5 text-center md:text-left">Address</h3>
           <p>123 Street, New York, USA</p>
           <p>+012 345 67890</p>
           <p>info@example.com</p>
-          <div className="flex space-x-4 mt-4">
+          <div className="flex gap-4 mt-4">
             <a href="#" className="text-white text-xl hover:text-blue-400">
-              <i className="fab fa-twitter"></i>
+              <Twitter size={28} />
             </a>
             <a href="#" className="text-white text-xl hover:text-blue-400">
-              <i className="fab fa-facebook-f"></i>
+              <Facebook size={28} />
             </a>
             <a href="#" className="text-white text-xl hover:text-blue-400">
-              <i className="fab fa-youtube"></i>
+              <Linkedin size={28} />
             </a>
             <a href="#" className="text-white text-xl hover:text-blue-400">
-              <i className="fab fa-linkedin"></i>
+              <FaWhatsapp size={28} />
             </a>
           </div>
         </div>
 
         <div className="footer-section mb-8 w-full md:w-1/3">
-          <h3 className="text-lg mb-5">Quick Links</h3>
+          <h3 className="text-lg mb-5 text-center md:text-left">Quick Links</h3>
           <ul>
             <li className="mb-2">
               <a href="#" className="hover:text-blue-400">About Us</a>
@@ -47,14 +49,10 @@ export default function Footer() {
         </div>
 
         <div className="footer-section mb-8 w-full md:w-1/3">
-          <h3 className="text-lg mb-5">Newsletter</h3>
-          <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
+          <h3 className="text-lg mb-5 text-center md:text-left">Newsletter</h3>
+          <p>Please add your email to get all the latest updates</p>
           <form className="mt-4 flex">
-            <input
-              type="email"
-              placeholder="Your email"
-              className="p-2 w-2/3 rounded-l-lg border-none"
-            />
+            <input type="email" placeholder="Your email" className="p-2 w-full md:w-2/3 rounded-l-lg border-none" />
             <button type="submit" className="p-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600">
               SignUp
             </button>
