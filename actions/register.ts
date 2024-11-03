@@ -26,5 +26,5 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
         return { error: "Error" };
     }
 
-    return { success: "Email Sent!" };
+    return { success: "Account Registered Successfully!" };
 }
