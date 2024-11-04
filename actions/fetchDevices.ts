@@ -1,12 +1,17 @@
 "use server"
 
-import { realtimeDB } from "@/firebase/firebase"
-import { ref,set } from "firebase/database"
+import { realtimeDB } from "@/firebase/firebase";
+import { ref, onValue } from "firebase/database";
 
-export const fetchDevices = async () => {
-    try {
-        const deviceRef = ref(realtimeDB, 'devices');
-    } catch (error) {
-        return { error: "error"}
-    }
+interface Device {
+
+}
+
+export const fetchDevices = async () => {   
+    const devicesRef = ref(realtimeDB, '/devices');
+    onValue(devicesRef, (snapshot) => {
+        const data = snapshot.val();
+        return data;
+    });
+
 }
