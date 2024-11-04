@@ -4,6 +4,9 @@ import Footer from '@/components/Footer/Footer'
 import Navbar from '@/components/Navbar/Navbar'
 
 import Rahul from "./image/Rahul.jpg"
+import srk from "./image/srk.png"
+import shony from "./image/shony.png"
+import notgopi from "./image/notgopi.png"
 
 import { StaticImageData } from 'next/image'
 
@@ -14,10 +17,10 @@ type TeamMember = {
 }
 
 const teamMembers: TeamMember[] = [
-  { name: "Edwin C Shony", role: "Member", image: "/placeholder.svg?height=400&width=400" },
-  { name: "Gopikrishna K M", role: "Member", image: "/placeholder.svg?height=400&width=400" },
+  { name: "Edwin C Shony", role: "Member", image: shony },
+  { name: "Gopikrishna K M", role: "Member", image: notgopi },
   { name: "Rahul A B", role: "Member", image: Rahul },
-  { name: "Sreerag Sreekanth", role: "Member", image: "/placeholder.svg?height=400&width=400" }
+  { name: "Sreerag Sreekanth", role: "Member", image: srk }
 ]
   
 const projectGuide: TeamMember = {
