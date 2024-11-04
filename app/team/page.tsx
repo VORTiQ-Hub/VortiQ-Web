@@ -15,7 +15,7 @@ const teamMembers: TeamMember[] = [
   { name: "Rahul A B", role: "Member", image: "/placeholder.svg?height=400&width=400" },
   { name: "Sreerag Sreekanth", role: "Member", image: "/placeholder.svg?height=400&width=400" }
 ]
-
+  
 const projectGuide: TeamMember = {
   name: "Mrs. Geethu Wilson",
   role: "Project Guide",
