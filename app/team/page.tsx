@@ -3,16 +3,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Footer from '@/components/Footer/Footer'
 import Navbar from '@/components/Navbar/Navbar'
 
+import Rahul from "./image/Rahul.jpg"
+
+import { StaticImageData } from 'next/image'
+
 type TeamMember = {
   name: string
   role: string
-  image: string
+  image: string | StaticImageData
 }
 
 const teamMembers: TeamMember[] = [
   { name: "Edwin C Shony", role: "Member", image: "/placeholder.svg?height=400&width=400" },
   { name: "Gopikrishna K M", role: "Member", image: "/placeholder.svg?height=400&width=400" },
-  { name: "Rahul A B", role: "Member", image: "/placeholder.svg?height=400&width=400" },
+  { name: "Rahul A B", role: "Member", image: Rahul },
   { name: "Sreerag Sreekanth", role: "Member", image: "/placeholder.svg?height=400&width=400" }
 ]
   
@@ -38,7 +42,7 @@ export default function components() {
                   src={member.image}
                   alt={member.name}
                   width={400}
-                  height={400}
+                  height={450}
                   className="rounded-full w-32 h-32 mx-auto mb-4"
                 />
                 <CardTitle className="text-xl text-center">{member.name}</CardTitle>

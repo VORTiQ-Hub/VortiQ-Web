@@ -8,9 +8,9 @@ export default function Footer() {
       <div className="container mx-auto flex flex-wrap justify-between px-10">
         <div className="footer-section mb-8 w-full md:w-1/3">
           <h3 className="text-lg mb-5 text-center md:text-left">Address</h3>
-          <p>123 Street, New York, USA</p>
-          <p>+012 345 67890</p>
-          <p>info@example.com</p>
+          <p>SCET, Kodakara, Thrissur, India</p>
+          <p>+91 79945 42331</p>
+          <p>egrsproject@gmail.com</p>
           <div className="flex gap-4 mt-4">
             <a href="#" className="text-white text-xl hover:text-blue-400">
               <Twitter size={28} />
