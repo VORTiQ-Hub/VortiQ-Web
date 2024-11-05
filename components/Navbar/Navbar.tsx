@@ -24,7 +24,7 @@ export default function Navbar() {
             
             <div className="justify-center items-center gap-4 text-white hidden md:flex">
                 <Link href="/" className="text-white text-lg font-bold hover:text-gray-300">Home</Link>
-                <Link href="/" className="text-white text-lg font-bold hover:text-gray-300">Contact</Link>
+                <Link href="/contact" className="text-white text-lg font-bold hover:text-gray-300">Contact</Link>
                 <Link href="/team" className="text-white text-lg font-bold hover:text-gray-300">Team</Link>
                 <Link href="/FAQ" className="text-white text-lg font-bold hover:text-gray-300">FAQs</Link>
             </div>
