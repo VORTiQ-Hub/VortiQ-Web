@@ -6,18 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { ComputerIcon, Divide, File, NetworkIcon, School } from "lucide-react";
-import {
-    Card, CardHeader, CardTitle, CardDescription, CardContent
-} from "@/components/ui/card";
-import {
-    Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription
-} from "@/components/ui/dialog";
-import {
-    DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel,
-    DropdownMenuSeparator, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem
-} from "@/components/ui/dropdown-menu";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
 import { realtimeDB } from "@/firebase/firebase";
 import { ref, onValue, set } from "firebase/database";
+import { fetchDevices } from "@/actions/fetchDevices";
 
 // Define types for the RelayToggle component props
 interface RelayToggleProps {
@@ -80,16 +74,17 @@ export default function Device() {
     });
     const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
 
-    const fetchDevice = async () => {
-        const deviceRef = ref(realtimeDB, '/devices/201');
-        onValue(deviceRef, (snapshot) => {
-            const data = snapshot.val();
-            setDeviceData(data);
-        });
-    };
-
     useEffect(() => {
-        fetchDevice();
+        const getData = async () => {
+            try {
+                const data = await fetchDevices("201");
+                setDeviceData(data);
+            } catch (error) {
+                console.error("Error fetching device data:", error);
+            }
+        }
+        
+        getData();
     }, []);
 
     const handleFilterChange = (type: string, checked: boolean) => {
@@ -123,14 +118,22 @@ export default function Device() {
 
     const handleRelayToggle = (relayNumber: number, newState: boolean) => {
         const relayRef = ref(realtimeDB, `/devices/201/relay/${relayNumber}`);
+        
         set(relayRef, newState)
             .then(() => {
                 console.log(`Relay ${relayNumber} state updated successfully`);
+                // Update local deviceData state to reflect the new relay state
+                setDeviceData(prevData => {
+                    if (!prevData) return prevData;  // Return if no data
+                    const updatedRelayData = { ...prevData.relay, [relayNumber]: newState };
+                    return { ...prevData, relay: updatedRelayData };
+                });
             })
             .catch((error) => {
                 console.error(`Error updating relay ${relayNumber} state:`, error);
             });
     };
+    
 
     if (!deviceData) {
         return <div>Loading device data...</div>;
@@ -186,7 +189,7 @@ export default function Device() {
                                     key={key}
                                     relayNumber={parseInt(key)}
                                     isOn={value}
-                                    onToggle={(newState) => handleRelayToggle(parseInt(key), newState)}
+                                    onToggle={(newState) => {handleRelayToggle(parseInt(key), newState)} }
                                 />
                             ))}
                         </div>
