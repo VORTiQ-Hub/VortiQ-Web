@@ -13,7 +13,7 @@ import remoted from './images/remoted.svg'
 import monitoring from './images/monitoring.svg'
 import user from './images/user.svg'
 import flex from './images/flex.svg'
-import arch from './images/arch.svg'
+import archi from './images/archi.svg'
 import Link from 'next/link';
 
 
@@ -137,10 +137,10 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
             <Image
-              src={arch}
+              src={archi}
               alt="System Architecture"
-              width={2000}
-              height={2000}
+              width={8000}
+              height={8000}
               className="rounded-lg shadow-lg"
             />
           </div>
