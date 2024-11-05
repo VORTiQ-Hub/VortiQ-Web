@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Chart from "@/components/chart";
 import Status from "@/components/status";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
