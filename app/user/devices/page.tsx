@@ -75,16 +75,12 @@ export default function Device() {
     const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
 
     useEffect(() => {
-        const getData = async () => {
-            try {
-                const data = await fetchDevices("201");
-                setDeviceData(data);
-            } catch (error) {
-                console.error("Error fetching device data:", error);
-            }
-        }
-        
-        getData();
+        const devicesRef = ref(realtimeDB, '/devices/201');
+        onValue(devicesRef, (snapshot) => {
+            const data = snapshot.val();
+            setDeviceData(data as DeviceData);
+        });
+
     }, []);
 
     const handleFilterChange = (type: string, checked: boolean) => {
