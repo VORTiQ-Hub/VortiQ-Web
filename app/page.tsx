@@ -14,6 +14,7 @@ import monitoring from './images/monitoring.svg'
 import user from './images/user.svg'
 import flex from './images/flex.svg'
 import arch from './images/arch.svg'
+import Link from 'next/link';
 
 
 const features = [
@@ -70,9 +71,11 @@ export default function Home() {
         <div className="relative z-10 text-white max-w-4xl mx-auto px-4">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">IoT-Based Unified Automation System for Institutes</h1>
           <p className="text-xl mb-8">Empower your institution with smart, efficient, and secure appliance control</p>
-          <Button size="lg" className="bg-blue-500 hover:bg-blue-600 text-white">
-            Learn More
-          </Button>
+          <Link href="/FAQ">
+            <Button size="lg" className="bg-blue-500 hover:bg-blue-600 text-white">
+              Learn More
+            </Button>
+          </Link>
         </div>
       </section>
 
