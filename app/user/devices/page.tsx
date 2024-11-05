@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Status from "@/components/status";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { ComputerIcon, Divide, File, NetworkIcon, School } from "lucide-react";
 import {
     Card, CardHeader, CardTitle, CardDescription, CardContent
@@ -16,18 +17,68 @@ import {
     DropdownMenuSeparator, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem
 } from "@/components/ui/dropdown-menu";
 import { realtimeDB } from "@/firebase/firebase";
-import { ref, onValue } from "firebase/database";
-// import { fetchDevices } from "@/actions/fetchDevices";
+import { ref, onValue, set } from "firebase/database";
+
+// Define types for the RelayToggle component props
+interface RelayToggleProps {
+    relayNumber: number;
+    isOn: boolean;
+    onToggle: (newState: boolean) => void;
+}
+
+// New component for the animated toggle button with proper typing
+const RelayToggle: React.FC<RelayToggleProps> = ({ relayNumber, isOn, onToggle }) => {
+    return (
+        <div className="flex items-center space-x-4">
+            <label htmlFor={`relay-${relayNumber}`} className="font-medium w-20">
+                Relay {relayNumber}
+            </label>
+            <Switch
+                id={`relay-${relayNumber}`}
+                checked={isOn}
+                onCheckedChange={onToggle}
+            />
+        </div>
+    );
+};
+
+// Define types for device data
+interface SensorData {
+    current: number;
+    gas: number;
+    humidity: number;
+    pressure: number;
+    temperature: number;
+    voltage: number;
+}
+
+interface RelayData {
+    [key: string]: boolean;
+}
+
+interface DeviceData {
+    relay: RelayData;
+    sensor: SensorData;
+}
+
+interface Device {
+    id: number;
+    name: string;
+    ip: string;
+    type: string;
+    status: string;
+    details: string;
+}
 
 export default function Device() {
-    const [deviceData, setDeviceData] = useState<any>(null);
-    const [devices, setDevices] = useState<any[]>([]);
+    const [deviceData, setDeviceData] = useState<DeviceData | null>(null);
+    const [devices, setDevices] = useState<Device[]>([]);
     const [filters, setFilters] = useState({
         active: true,
         inactive: false,
         deviceTypes: new Set(["Desktop", "Laptop", "Mobile", "Tablet"]),
     });
-    const [selectedDevice, setSelectedDevice] = useState<{ id: number; name: string; ip: string; type: string; status: string; details: string } | null>(null);
+    const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
 
     const fetchDevice = async () => {
         const deviceRef = ref(realtimeDB, '/devices/201');
@@ -66,9 +117,24 @@ export default function Device() {
         return (isActive || isInactive) && isInType;
     });
 
-    const handleDeviceClick = (device: { id: number; name: string; ip: string; type: string; status: string; details: string }) => {
+    const handleDeviceClick = (device: Device) => {
         setSelectedDevice(device);
     };
+
+    const handleRelayToggle = (relayNumber: number, newState: boolean) => {
+        const relayRef = ref(realtimeDB, `/devices/201/relay/${relayNumber}`);
+        set(relayRef, newState)
+            .then(() => {
+                console.log(`Relay ${relayNumber} state updated successfully`);
+            })
+            .catch((error) => {
+                console.error(`Error updating relay ${relayNumber} state:`, error);
+            });
+    };
+
+    if (!deviceData) {
+        return <div>Loading device data...</div>;
+    }
 
     return (
         <div className="flex h-full w-full flex-col bg-muted/40 p-3">
@@ -109,34 +175,39 @@ export default function Device() {
             </header>
 
             {/* Display fetched device data */}
-            {deviceData && (
-                <div className="m-4 p-4 border rounded-lg bg-background">
-                    <h3 className="font-semibold text-lg">Device ID: 201</h3>
-                    <div className="grid grid-cols-2">
-                        <div>
-                            <h4 className="font-semibold">Relay Status:</h4>
-                            <ul>
-                                {Object.entries(deviceData.relay).map(([key, value]) => (
-                                    <li key={key}>
-                                        Relay {key}: <strong>{value ? <div className="text-green-700">ON</div> : <div className="text-red-700">OFF</div>}</strong>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 className="font-semibold">Sensor Data:</h4>
-                            <ul>
-                                <li>Current: {deviceData.sensor.current} A</li>
-                                <li>Gas: {deviceData.sensor.gas} ppm</li>
-                                <li>Humidity: {deviceData.sensor.humidity} %</li>
-                                <li>Pressure: {deviceData.sensor.pressure} Pa</li>
-                                <li>Temperature: {deviceData.sensor.temperature} °C</li>
-                                <li>Voltage: {deviceData.sensor.voltage} V</li>
-                            </ul>
+            <div className="m-4 p-4 border rounded-lg bg-background">
+                <h3 className="font-semibold text-lg">Device ID: 201</h3>
+                <div className="grid grid-cols-2 gap-4">
+                    <div>
+                        <h4 className="font-semibold mb-2">Relay Status:</h4>
+                        <div className="space-y-2">
+                            {deviceData.relay && Object.entries(deviceData.relay).map(([key, value]) => (
+                                <RelayToggle
+                                    key={key}
+                                    relayNumber={parseInt(key)}
+                                    isOn={value}
+                                    onToggle={(newState) => handleRelayToggle(parseInt(key), newState)}
+                                />
+                            ))}
                         </div>
                     </div>
+                    <div>
+                        <h4 className="font-semibold">Sensor Data:</h4>
+                        <ul>
+                            {deviceData.sensor && (
+                                <>
+                                    <li>Current: {deviceData.sensor.current} A</li>
+                                    <li>Gas: {deviceData.sensor.gas} ppm</li>
+                                    <li>Humidity: {deviceData.sensor.humidity} %</li>
+                                    <li>Pressure: {deviceData.sensor.pressure} Pa</li>
+                                    <li>Temperature: {deviceData.sensor.temperature} °C</li>
+                                    <li>Voltage: {deviceData.sensor.voltage} V</li>
+                                </>
+                            )}
+                        </ul>
+                    </div>
                 </div>
-            )}
+            </div>
 
             <div className="flex w-full justify-center items-center px-4 sm:px-6">
                 <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8">
