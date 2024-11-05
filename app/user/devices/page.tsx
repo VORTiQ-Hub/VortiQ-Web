@@ -11,7 +11,6 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
 import { realtimeDB } from "@/firebase/firebase";
 import { ref, onValue, set } from "firebase/database";
-import { fetchDevices } from "@/actions/fetchDevices";
 
 // Define types for the RelayToggle component props
 interface RelayToggleProps {
@@ -75,16 +74,12 @@ export default function Device() {
     const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
 
     useEffect(() => {
-        const getData = async () => {
-            try {
-                const data = await fetchDevices("201");
-                setDeviceData(data);
-            } catch (error) {
-                console.error("Error fetching device data:", error);
-            }
-        }
-        
-        getData();
+        const devicesRef = ref(realtimeDB, '/devices/201');
+        onValue(devicesRef, (snapshot) => {
+            const data = snapshot.val();
+            setDeviceData(data as DeviceData);
+        });
+
     }, []);
 
     const handleFilterChange = (type: string, checked: boolean) => {
@@ -178,7 +173,7 @@ export default function Device() {
             </header>
 
             {/* Display fetched device data */}
-            <div className="m-4 p-4 border rounded-lg bg-background">
+            <div className="m-4 p-4 border rounded-lg bg-background h-[77dvh]">
                 <h3 className="font-semibold text-lg">Device ID: 201</h3>
                 <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -198,14 +193,40 @@ export default function Device() {
                         <h4 className="font-semibold">Sensor Data:</h4>
                         <ul>
                             {deviceData.sensor && (
-                                <>
-                                    <li>Current: {deviceData.sensor.current} A</li>
-                                    <li>Gas: {deviceData.sensor.gas} ppm</li>
-                                    <li>Humidity: {deviceData.sensor.humidity} %</li>
-                                    <li>Pressure: {deviceData.sensor.pressure} Pa</li>
-                                    <li>Temperature: {deviceData.sensor.temperature} °C</li>
-                                    <li>Voltage: {deviceData.sensor.voltage} V</li>
-                                </>
+                                <table className="min-w-full divide-y divide-gray-200">
+                                <thead>
+                                  <tr>
+                                    <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Parameter</th>
+                                    <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Value</th>
+                                  </tr>
+                                </thead>
+                                <tbody className=" divide-y divide-gray-200">
+                                  <tr>
+                                    <td className="px-4 py-2 whitespace-nowrap">Current:</td>
+                                    <td className="px-4 py-2">{deviceData.sensor.current} A</td>
+                                  </tr>
+                                  <tr>
+                                    <td className="px-4 py-2 whitespace-nowrap">Gas:</td>
+                                    <td className="px-4 py-2">{deviceData.sensor.gas} ppm</td>
+                                  </tr>
+                                  <tr>
+                                    <td className="px-4 py-2 whitespace-nowrap">Humidity:</td>
+                                    <td className="px-4 py-2">{deviceData.sensor.humidity} %</td>
+                                  </tr>
+                                  <tr>
+                                    <td className="px-4 py-2 whitespace-nowrap">Pressure:</td>
+                                    <td className="px-4 py-2">{deviceData.sensor.pressure} Pa</td>
+                                  </tr>
+                                  <tr>
+                                    <td className="px-4 py-2 whitespace-nowrap">Temperature:</td>
+                                    <td className="px-4 py-2">{deviceData.sensor.temperature} °C</td>
+                                  </tr>
+                                  <tr>
+                                    <td className="px-4 py-2 whitespace-nowrap">Voltage:</td>
+                                    <td className="px-4 py-2">{deviceData.sensor.voltage} V</td>
+                                  </tr>
+                                </tbody>
+                              </table>
                             )}
                         </ul>
                     </div>
