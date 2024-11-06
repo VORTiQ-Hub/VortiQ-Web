@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2024 Rahul A B
+Copyright (c) 2024 Edwin C Shony, Gopikrishna K M, Rahul A B, Sreerag Sreekanth 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
