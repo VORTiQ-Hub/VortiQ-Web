@@ -10,7 +10,7 @@ import { LayoutDashboard, ShoppingCart, Users, BarChart, Settings, HelpCircle, M
 const navItems = [
     { name: 'Dashboard', href: '/user', icon: LayoutDashboard },
     { name: 'Device Dashboard', href: '/user/devices', icon: Users },
-    // { name: 'Analytics', href: '/user/analytics', icon: BarChart },
+    { name: 'Analytics', href: '/user/analytics', icon: BarChart },
     { name: 'Settings', href: '/user/settings', icon: Settings },
     { name: 'Help', href: '/user/help', icon: HelpCircle },
 ];

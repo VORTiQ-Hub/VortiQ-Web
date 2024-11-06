@@ -1,3 +1,5 @@
+// device.tsx
+
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -5,9 +7,9 @@ import Status from "@/components/status";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { ComputerIcon, Divide, File, NetworkIcon, School } from "lucide-react";
+import { ComputerIcon, File, NetworkIcon, School } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
 import { realtimeDB } from "@/firebase/firebase";
 import { ref, onValue, set } from "firebase/database";
@@ -73,15 +75,16 @@ export default function Device() {
     });
     const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
 
+    // Fetch device data from Firebase
     useEffect(() => {
         const devicesRef = ref(realtimeDB, '/devices/201');
         onValue(devicesRef, (snapshot) => {
             const data = snapshot.val();
             setDeviceData(data as DeviceData);
         });
-
     }, []);
 
+    // Handle filter changes
     const handleFilterChange = (type: string, checked: boolean) => {
         setFilters((prev) => {
             const newFilters = { ...prev };
@@ -100,6 +103,7 @@ export default function Device() {
         });
     };
 
+    // Filter devices based on selected filters
     const filteredDevices = devices.filter((device) => {
         const isActive = filters.active && device.status === "Active";
         const isInactive = filters.inactive && device.status === "Inactive";
@@ -107,13 +111,14 @@ export default function Device() {
         return (isActive || isInactive) && isInType;
     });
 
+    // Handle device click (for showing device details)
     const handleDeviceClick = (device: Device) => {
         setSelectedDevice(device);
     };
 
+    // Handle relay toggle (update Firebase and local state)
     const handleRelayToggle = (relayNumber: number, newState: boolean) => {
         const relayRef = ref(realtimeDB, `/devices/201/relay/${relayNumber}`);
-        
         set(relayRef, newState)
             .then(() => {
                 console.log(`Relay ${relayNumber} state updated successfully`);
@@ -128,8 +133,8 @@ export default function Device() {
                 console.error(`Error updating relay ${relayNumber} state:`, error);
             });
     };
-    
 
+    // If device data is not loaded yet, show loading message
     if (!deviceData) {
         return <div>Loading device data...</div>;
     }
@@ -184,7 +189,7 @@ export default function Device() {
                                     key={key}
                                     relayNumber={parseInt(key)}
                                     isOn={value}
-                                    onToggle={(newState) => {handleRelayToggle(parseInt(key), newState)} }
+                                    onToggle={(newState) => { handleRelayToggle(parseInt(key), newState); }}
                                 />
                             ))}
                         </div>
@@ -194,48 +199,49 @@ export default function Device() {
                         <ul>
                             {deviceData.sensor && (
                                 <table className="min-w-full divide-y divide-gray-200">
-                                <thead>
-                                  <tr>
-                                    <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Parameter</th>
-                                    <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Value</th>
-                                  </tr>
-                                </thead>
-                                <tbody className=" divide-y divide-gray-200">
-                                  <tr>
-                                    <td className="px-4 py-2 whitespace-nowrap">Current:</td>
-                                    <td className="px-4 py-2">{deviceData.sensor.current} A</td>
-                                  </tr>
-                                  <tr>
-                                    <td className="px-4 py-2 whitespace-nowrap">Gas:</td>
-                                    <td className="px-4 py-2">{deviceData.sensor.gas} ppm</td>
-                                  </tr>
-                                  <tr>
-                                    <td className="px-4 py-2 whitespace-nowrap">Humidity:</td>
-                                    <td className="px-4 py-2">{deviceData.sensor.humidity} %</td>
-                                  </tr>
-                                  <tr>
-                                    <td className="px-4 py-2 whitespace-nowrap">Pressure:</td>
-                                    <td className="px-4 py-2">{deviceData.sensor.pressure} Pa</td>
-                                  </tr>
-                                  <tr>
-                                    <td className="px-4 py-2 whitespace-nowrap">Temperature:</td>
-                                    <td className="px-4 py-2">{deviceData.sensor.temperature} °C</td>
-                                  </tr>
-                                  <tr>
-                                    <td className="px-4 py-2 whitespace-nowrap">Voltage:</td>
-                                    <td className="px-4 py-2">{deviceData.sensor.voltage} V</td>
-                                  </tr>
-                                </tbody>
-                              </table>
+                                    <thead>
+                                        <tr>
+                                            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Parameter</th>
+                                            <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-200">
+                                        <tr>
+                                            <td className="px-4 py-2 whitespace-nowrap">Current:</td>
+                                            <td className="px-4 py-2">{deviceData.sensor.current} A</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="px-4 py-2 whitespace-nowrap">Gas:</td>
+                                            <td className="px-4 py-2">{deviceData.sensor.gas} ppm</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="px-4 py-2 whitespace-nowrap">Humidity:</td>
+                                            <td className="px-4 py-2">{deviceData.sensor.humidity} %</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="px-4 py-2 whitespace-nowrap">Pressure:</td>
+                                            <td className="px-4 py-2">{deviceData.sensor.pressure} Pa</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="px-4 py-2 whitespace-nowrap">Temperature:</td>
+                                            <td className="px-4 py-2">{deviceData.sensor.temperature} °C</td>
+                                        </tr>
+                                        <tr>
+                                            <td className="px-4 py-2 whitespace-nowrap">Voltage:</td>
+                                            <td className="px-4 py-2">{deviceData.sensor.voltage} V</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             )}
                         </ul>
                     </div>
                 </div>
             </div>
 
+            {/* Devices Display Section */}
             <div className="flex w-full justify-center items-center px-4 sm:px-6">
                 <div className="flex flex-wrap justify-center items-center gap-4 md:gap-8">
-                    {filteredDevices.map(device => (
+                    {filteredDevices.map((device) => (
                         <Card key={device.id} onClick={() => handleDeviceClick(device)} className="cursor-pointer">
                             <CardHeader className="flex flex-row items-center gap-4">
                                 {device.type === "Desktop" && <ComputerIcon className="w-8 h-8" />}
@@ -257,6 +263,7 @@ export default function Device() {
                 </div>
             </div>
 
+            {/* Device Details Modal */}
             {selectedDevice && (
                 <Dialog open={!!selectedDevice} onOpenChange={() => setSelectedDevice(null)}>
                     <DialogContent>
