@@ -1,12 +1,13 @@
 "use client";
 
+import { useForm } from "react-hook-form";
+import { db } from "@/firebase/firebase";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { fetchUser } from "@/actions/fetchUser";
-import { useForm } from "react-hook-form";
 import { updateDoc, doc, serverTimestamp } from "firebase/firestore";
-import { db } from "@/firebase/firebase";
 
 interface UserData {
     name: string;
@@ -14,7 +15,14 @@ interface UserData {
     usertype: string;
 }
 
-export default function Page({ params }: { params: { id: string } }) {
+type PageProps = {
+    params: {
+        id: string;
+    };
+}
+
+export default function Page() {
+    const params = useParams<{ id: string }>();
     const [data, setData] = useState<UserData | null>(null);
     const [error, setError] = useState<string | null>(null);
     const { register, handleSubmit, setValue } = useForm<UserData>();
