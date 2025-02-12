@@ -1,15 +1,15 @@
-import { useState } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { cn } from "@/lib/utils"
-import { LayoutDashboard, ShoppingCart, Users, BarChart, Settings, HelpCircle, Menu } from 'lucide-react'
+import Link from 'next/link';
+import { cn } from "@/lib/utils";
+import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { LayoutDashboard, MonitorSpeaker, BarChart, Settings, HelpCircle, Menu } from 'lucide-react';
 
 const navItems = [
     { name: 'Dashboard', href: '/user', icon: LayoutDashboard },
-    { name: 'Device Dashboard', href: '/user/devices', icon: Users },
+    { name: 'Device Dashboard', href: '/user/devices', icon: MonitorSpeaker },
     { name: 'Analytics', href: '/user/analytics', icon: BarChart },
     // { name: 'Settings', href: '/user/settings', icon: Settings },
     // { name: 'Help', href: '/user/help', icon: HelpCircle },
