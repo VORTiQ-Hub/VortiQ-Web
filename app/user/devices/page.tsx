@@ -14,6 +14,7 @@ interface DeviceData {
     status: string;
     relay: RelayData;
     sensor: SensorData;
+    data: ESPData;
 }
 
 interface RelayData {
@@ -27,6 +28,11 @@ interface SensorData {
     pressure: number;
     temperature: number;
     voltage: number;
+}
+
+interface ESPData{
+    "Room ID": number;
+    "MAC Address": string;
 }
 
 export default function Page() {
@@ -72,6 +78,10 @@ export default function Page() {
                                 temperature: 0,
                                 voltage: 0,
                             },
+                            data: (value as DeviceData).data || {
+                                roomID: 0,
+                                MAC_address: "",
+                            },
                         };
                     } else {
                         return {
@@ -85,6 +95,10 @@ export default function Page() {
                                 pressure: 0,
                                 temperature: 0,
                                 voltage: 0,
+                            },
+                            data: {
+                                roomID: 0,
+                                MAC_address: "",
                             },
                         };
                     }
@@ -134,7 +148,7 @@ export default function Page() {
             <h1 className="text-2xl font-bold mb-6">Device Information</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {deviceData.map((device) => (
-                    <DeviceInfoCard key={device.id} macAddress="00:1A:2B:3C:4D:5E" boardId={device.id} />
+                    <DeviceInfoCard key={device.id} macAddress={device.data["MAC Address"]} boardId={device.data["Room ID"]} />
                 ))}
             </div>
         </div>

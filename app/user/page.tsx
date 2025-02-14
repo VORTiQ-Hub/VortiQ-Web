@@ -11,8 +11,10 @@ export default function UserPage() {
     useEffect(() => {
         const devicesRef = ref(realtimeDB, "/devices");
         const unsubscribe = onValue(devicesRef, (snapshot) => {
-            const data = snapshot.val().length;
-            setCount(data);
+            const data = snapshot.val();
+            if (data) {
+                setCount(Object.keys(data).length);
+            }
         });
 
         return () => {
