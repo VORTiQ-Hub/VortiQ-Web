@@ -4,28 +4,13 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { userCheck } from "@/actions/user-check";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { SignOutButton } from "@/components/auth/sign-out-button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { LayoutDashboard, Users, Menu, Settings, MonitorSpeaker, BarChart } from "lucide-react";
+import { useAuth } from "@/firebase/AuthProvider";
+import { LayoutDashboard, Menu } from "lucide-react";
+import { navItems } from "@/lib/navItems";
 
-const navItems = {
-    "admin": [
-        { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-        { name: "Users", href: "/dashboard/admin/users", icon: Users },
-        { name: "Devices", href: "/dashboard/devices", icon: MonitorSpeaker },
-        { name: "Settings", href: "/dashboard/settings", icon: Settings },
-    ],
-    "user": [
-        { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-        { name: "Device Dashboard", href: "/dashboard/devices", icon: MonitorSpeaker },
-        { name: "Analytics", href: "/dashboard/user/analytics", icon: BarChart },
-        { name: 'Settings', href: '/dashboard/settings', icon: Settings },
-        // { name: 'Help', href: '/user/help', icon: HelpCircle },
-    ],
-}
 
 interface LayoutProps {
   children: React.ReactNode
@@ -34,29 +19,10 @@ interface LayoutProps {
 export default function DashboardLayout({ children }: LayoutProps) {
     const pathname = usePathname();
     const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [userName, setUserName] = useState<string>("");
-    const [userEmail, setUserEmail] = useState<string>("");
-    const [userRole, setUserRole] = useState<"admin" | "user">("user");
+    const { user, role } = useAuth();
 
-    const currentNavItems = navItems[userRole] || [];
-
-    useEffect(() => {
-        setLoading(true);
-        userCheck().then((res) => {
-            if ("success" in res) {
-                setUserRole(res.role);
-                setUserName(res.name);
-                setUserEmail(res.email);
-            } else {
-                console.error(res.error);
-            }
-            setLoading(false);
-        }).catch((error) => {
-            console.error("An error occurred during user check:", error);
-            setLoading(false);
-        });
-    }, []);
+    type Role = 'Admin' | 'User';
+    const currentNavItems = navItems[role as Role];
 
     interface NavItem {
         name: string
@@ -76,12 +42,12 @@ export default function DashboardLayout({ children }: LayoutProps) {
             <div className="flex h-[60px] items-center border-b px-6">
                 <Link className="flex items-center gap-2 font-semibold" href="#">
                     <LayoutDashboard className="h-6 w-6" />
-                    <span className="">{userRole === "admin" ? "Admin Dashboard" : "User Dashboard"}</span>
+                    <span className="">{role === "admin" ? "Admin Dashboard" : "User Dashboard"}</span>
                 </Link>
             </div>
             <ScrollArea className="flex-1 px-3">
                 <div className="flex flex-col gap-1">
-                    {currentNavItems.map((item, index) => (
+                    {currentNavItems?.map((item, index) => (
                         <NavLink key={index} item={item} />
                     ))}
                 </div>
@@ -89,17 +55,13 @@ export default function DashboardLayout({ children }: LayoutProps) {
             <div className="mt-auto p-4">
                 <div className="flex items-center gap-4 rounded-lg bg-gray-100 p-4 dark:bg-gray-800">
                     <div className="flex flex-col">
-                        <span className="text-sm font-medium">{userName}</span>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">{userEmail}</span>
+                        <span className="text-sm font-medium">{user.name}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">{user.email}</span>
                     </div>
                 </div>
             </div>
         </div>
     )
-
-    if (loading) {
-        return <div>Loading...</div>
-    }
 
     return (
         <div className="flex h-screen">
@@ -118,9 +80,6 @@ export default function DashboardLayout({ children }: LayoutProps) {
                 <SidebarContent />
             </div>
             <div className="flex flex-col flex-1 overflow-hidden">
-                <div className="min-h-[60px] w-full flex justify-end items-center px-6 border-b">
-                    <SignOutButton />
-                </div>
                 <main className="flex-1 overflow-y-auto p-6">{children}</main>
             </div>
         </div>

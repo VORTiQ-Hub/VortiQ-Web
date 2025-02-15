@@ -1,10 +1,10 @@
 "use client";
 
+import { File } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { realtimeDB } from "@/firebase/firebase";
 import { onValue, ref } from "firebase/database";
-import { File, NetworkIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { DeviceInfoCard } from "@/components/DeviceInfoCard";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";

@@ -57,14 +57,7 @@ export default function Home() {
       
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center text-center">
-        <Image
-          src={hero}
-          alt="IoT Automation System"
-          layout="fill"
-          objectFit="cover"
-          quality={100}
-          priority
-        />
+        <Image src={hero} alt="IoT Automation System" layout="fill" objectFit="cover" quality={100} priority />
         <div className="absolute inset-0 bg-black opacity-60"></div>
         <div className="relative z-10 text-white max-w-4xl mx-auto px-4">
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">IoT-Based Unified Automation System for Institutes</h1>
@@ -82,12 +75,7 @@ export default function Home() {
         <h2 className="text-3xl font-bold text-center mb-12">Key Features</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 50 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
+            <motion.div key={index} initial={{ opacity: 0, y: 50 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: index * 0.1 }}>
               <Card className="bg-gray-800 border-gray-700">
                 <CardHeader>
                   <div className="flex items-center justify-center gap-4">
@@ -110,13 +98,7 @@ export default function Home() {
           <h2 className="text-3xl font-bold text-center mb-12">Benefits for Institutions</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {benefits.map((benefit, index) => (
-              <motion.div
-                key={index}
-                className="flex items-start space-x-4"
-                initial={{ opacity: 0, x: -50 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
+              <motion.div key={index} className="flex items-start space-x-4" initial={{ opacity: 0, x: -50 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.5, delay: index * 0.1 }}>
                 <div className="flex-shrink-0 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
                   <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
