@@ -32,9 +32,6 @@ const projectGuide: TeamMember = {
 export default function components() {
   return (
     <section className="bg-background">
-      <div className="fixed w-full z-20">
-        <Navbar />
-      </div>
       <div className="container mx-auto px-4 py-16">
         <h2 className="text-3xl font-bold text-center mb-8">Our Team</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">

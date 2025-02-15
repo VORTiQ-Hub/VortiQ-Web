@@ -1,18 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+
 import { Bar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ChartOptions,
-} from "chart.js";
 import { ref, onValue } from "firebase/database";
 import { realtimeDB } from "@/firebase/firebase";
+import React, { useEffect, useState } from "react";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ChartOptions } from "chart.js";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -22,8 +14,8 @@ interface SensorData {
 }
 
 const FiveMinuteEnergyConsumptionChart: React.FC = () => {
-  const [consumptionData, setConsumptionData] = useState<number[]>([]);
   const [labels, setLabels] = useState<string[]>([]);
+  const [consumptionData, setConsumptionData] = useState<number[]>([]);
   const [lastUpdateTime, setLastUpdateTime] = useState<Date | null>(null);
 
   useEffect(() => {

@@ -1,50 +1,49 @@
-'use client'
+"use client";
 
-import React from 'react'
-import Image from 'next/image'
-import { motion } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import Navbar from '@/components/Navbar/Navbar'
-import Footer from '@/components/Footer/Footer'
-import hero from './images/hero.png'
-import remoted from './images/remoted.svg'
-import monitoring from './images/monitoring.svg'
-import user from './images/user.svg'
-import flex from './images/flex.svg'
-import archi from './images/archi.svg'
-import Link from 'next/link';
+import React from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import hero from "@/public/img/hero.png";
+import user from "@/public/img/user.svg";
+import flex from "@/public/img/flex.svg";
+import archi from "@/public/img/archi.svg";
+import remoted from "@/public/img/remoted.svg";
+import { Button } from "@/components/ui/button";
+import Footer from "@/components/Footer/Footer";
+import monitoring from "@/public/img/monitoring.svg";
+import { useInView } from "react-intersection-observer";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 
 const features = [
   { 
-    title: 'Remote Control', 
-    description: 'Manage appliances from anywhere in the world',
+    title: "Remote Control", 
+    description: "Manage appliances from anywhere in the world",
     icon: remoted
   },
   { 
-    title: 'Real-Time Monitoring', 
-    description: 'Check device status and power usage instantly',
+    title: "Real-Time Monitoring", 
+    description: "Check device status and power usage instantly",
     icon: monitoring
   },
   { 
-    title: 'User Management', 
-    description: 'Admins can easily add and manage users and devices',
+    title: "User Management", 
+    description: "Admins can easily add and manage users and devices",
     icon: user
   },
   { 
-    title: 'Flexible Communication', 
-    description: 'Uses ESP-NOW or LoRa for reliable device communication',
+    title: "Flexible Communication", 
+    description: "Uses ESP-NOW or LoRa for reliable device communication",
     icon: flex
   },
 ]
 
 const benefits = [
-  'Reduce energy waste by remotely turning off forgotten devices',
-  'Improve safety with real-time monitoring of air quality and temperature',
-  'Increase efficiency with centralized control of all appliances',
-  'Enhance security with detailed access logs and user permissions',
+  "Reduce energy waste by remotely turning off forgotten devices",
+  "Improve safety with real-time monitoring of air quality and temperature",
+  "Increase efficiency with centralized control of all appliances",
+  "Enhance security with detailed access logs and user permissions",
 ]
 
 export default function Home() {
@@ -55,7 +54,6 @@ export default function Home() {
 
   return (
     <div className="bg-gradient-to-b from-gray-900 to-gray-800 min-h-screen text-white">
-      <Navbar />
       
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center text-center">
@@ -93,7 +91,7 @@ export default function Home() {
               <Card className="bg-gray-800 border-gray-700">
                 <CardHeader>
                   <div className="flex items-center justify-center gap-4">
-                    <Image src={feature.icon} alt={feature.title} width={100} height={100} className='bg-gray-500 rounded-xl' />
+                    <Image src={feature.icon} alt={feature.title} width={100} height={100} className="bg-gray-500 rounded-xl" />
                     <CardTitle className="text-white">{feature.title}</CardTitle>
                   </div>
                 </CardHeader>

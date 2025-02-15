@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ChartOptions } from "chart.js";
 import { ref, onValue } from "firebase/database";
 import { realtimeDB } from "@/firebase/firebase";
+import React, { useEffect, useState } from "react";
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ChartOptions } from "chart.js";
 
 // Register the necessary chart components
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -18,12 +18,16 @@ interface SensorData {
     voltage: number;
 }
 
-const Chart: React.FC = () => {
-    const [sensorData, setSensorData] = useState<SensorData[]>([]);
+interface ChartProps {
+    id: number;
+}
+
+export default function Chart({ id }: ChartProps) {
     const [labels, setLabels] = useState<string[]>([]);
+    const [sensorData, setSensorData] = useState<SensorData[]>([]);
 
     useEffect(() => {
-        const dataRef = ref(realtimeDB, "/devices/201/sensor");
+        const dataRef = ref(realtimeDB, `/devices/${id}/sensor`);
         
         // Fetch new data every 2 seconds
         const interval = setInterval(() => {
@@ -43,7 +47,7 @@ const Chart: React.FC = () => {
         }, 2000);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [id]);
 
     const data = {
         labels,
@@ -93,7 +97,6 @@ const Chart: React.FC = () => {
         ],
     };
 
-    // Corrected Chart options
     const options: ChartOptions<'line'> = {
         responsive: true,
         maintainAspectRatio: false,
@@ -109,7 +112,7 @@ const Chart: React.FC = () => {
         plugins: {
             legend: { 
                 display: true, 
-                position: "top" as const, // Correct type for 'position'
+                position: "top" as const,
             },
             tooltip: { enabled: true },
         },
@@ -121,5 +124,3 @@ const Chart: React.FC = () => {
         </div>
     );
 };
-
-export default Chart;

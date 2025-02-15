@@ -27,31 +27,30 @@ const RelayToggle: React.FC<RelayToggleProps> = ({ relayNumber, isOn, onToggle }
 };
 
 // Define types for device data
-interface SensorData {
-    current: number;
-    airQuality: number;
-    humidity: number;
-    pressure: number;
-    temperature: number;
-    voltage: number;
+interface DeviceData {
+    id: number;
+    status: string;
+    relay: RelayData;
+    sensor: SensorData;
+    data: ESPData;
 }
 
 interface RelayData {
     [key: string]: boolean;
 }
 
-interface DeviceData {
-    relay: RelayData;
-    sensor: SensorData;
+interface SensorData {
+    airQuality: number;
+    current: number;
+    humidity: number;
+    pressure: number;
+    temperature: number;
+    voltage: number;
 }
 
-interface Device {
-    id: number;
-    name: string;
-    mac: string;
-    type: string;
-    status: string;
-    details: string;
+interface ESPData{
+    "Room ID": number;
+    "MAC Address": string;
 }
 
 export default function Device() {

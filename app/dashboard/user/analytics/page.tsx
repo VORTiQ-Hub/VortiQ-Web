@@ -14,6 +14,7 @@ interface DeviceData {
     status: string;
     relay: RelayData;
     sensor: SensorData;
+    data: ESPData;
 }
 
 interface RelayData {
@@ -27,6 +28,11 @@ interface SensorData {
     pressure: number;
     temperature: number;
     voltage: number;
+}
+
+interface ESPData{
+    "Room ID": number;
+    "MAC Address": string;
 }
 
 export default function Page() {
@@ -72,6 +78,10 @@ export default function Page() {
                                 temperature: 0,
                                 voltage: 0,
                             },
+                            data: (value as DeviceData).data || {
+                                roomID: 0,
+                                MAC_address: "",
+                            },
                         };
                     } else {
                         return {
@@ -86,6 +96,10 @@ export default function Page() {
                                 temperature: 0,
                                 voltage: 0,
                             },
+                            data: {
+                                roomID: 0,
+                                MAC_address: "",
+                            },
                         };
                     }
                 });
@@ -99,13 +113,12 @@ export default function Page() {
     }, []); // Runs only once on mount
 
     return (
-        <div className="container mx-auto p-4">
+        <div className="container mx-auto">
             <header className="sticky top-0 z-30 py-5 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
                 <div className="flex items-center gap-2 text-lg font-semibold sm:text-base">
-                    <NetworkIcon className="w-6 h-6" />
-                    <span className="text-2xl font-semibold">Device Dashboard</span>
+                    <span className="text-2xl font-semibold">Analytics Dashboard</span>
                 </div>
-                <div className="relative ml-auto flex-1 md:grow-0">
+                <div className="relative ml-auto flex-1 md:grow-0 hidden sm:block">
                     <div className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input type="search" placeholder="Search devices..." className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]" />
                 </div>
@@ -131,10 +144,10 @@ export default function Page() {
                 </DropdownMenu>
             </header>
             
-            <h1 className="text-2xl font-bold mb-6">Device Information</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <h1 className="text-2xl font-bold p-2">Device Information</h1>
+            <div className="flex flex-wrap justify-center gap-6">
                 {deviceData.map((device) => (
-                    <DeviceInfoCard key={device.id} macAddress="00:1A:2B:3C:4D:5E" boardId={device.id} />
+                    <DeviceInfoCard key={device.id} macAddress={device.data["MAC Address"]} boardId={device.data["Room ID"]} analytics={true} />
                 ))}
             </div>
         </div>

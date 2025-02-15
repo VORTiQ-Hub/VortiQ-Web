@@ -101,7 +101,6 @@ export default function FAQPage() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col">
-      <Navbar />
       <main className="flex-grow p-8 pt-24">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-4xl font-bold mb-8 text-center">Frequently Asked Questions</h1>
