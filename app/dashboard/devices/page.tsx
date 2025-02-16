@@ -7,7 +7,7 @@ import { onValue, ref } from "firebase/database";
 import { File, NetworkIcon } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { DeviceInfoCard } from "@/components/DeviceInfoCard";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
 
 interface DeviceData {
     id: number;
@@ -30,15 +30,18 @@ interface SensorData {
     voltage: number;
 }
 
-interface ESPData{
+interface ESPData {
     "Room ID": number;
     "MAC Address": string;
+    Status: "Active" | "Inactive";
+    Students: number;
 }
 
 export default function Page() {
     const [deviceData, setDeviceData] = useState<DeviceData[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
     const [filters, setFilters] = useState({
-        active: true,
+        active: false,
         inactive: false,
     });
 
@@ -46,16 +49,19 @@ export default function Page() {
     const handleFilterChange = (type: string, checked: boolean) => {
         setFilters((prev) => {
             const newFilters = { ...prev };
-            if (type === "active") { 
-                newFilters.active = checked; 
+            if (type === "active") {
+                newFilters.active = checked;
             } else if (type === "inactive") {
                 newFilters.inactive = checked;
-            } else { }
+            }
             return newFilters;
         });
     };
 
-    // Filter devices based on selected filters
+    // Handle search term change
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
 
     useEffect(() => {
         const devicesRef = ref(realtimeDB, "/devices");
@@ -79,8 +85,10 @@ export default function Page() {
                                 voltage: 0,
                             },
                             data: (value as DeviceData).data || {
-                                roomID: 0,
-                                MAC_address: "",
+                                "Room ID": 0,
+                                "MAC Address": "",
+                                Status: "Inactive",
+                                Students: 0,
                             },
                         };
                     } else {
@@ -97,8 +105,10 @@ export default function Page() {
                                 voltage: 0,
                             },
                             data: {
-                                roomID: 0,
-                                MAC_address: "",
+                                "Room ID": 0,
+                                "MAC Address": "",
+                                Status: "Inactive",
+                                Students: 0,
                             },
                         };
                     }
@@ -112,8 +122,18 @@ export default function Page() {
         return () => unsubscribe(); // Cleanup listener on unmount
     }, []); // Runs only once on mount
 
+    // Filter and search devices
+    const filteredDevices = deviceData.filter((device) => {
+        const matchesSearch = device.data["MAC Address"].toLowerCase().includes(searchTerm.toLowerCase()) ||
+            device.data["Room ID"].toString().includes(searchTerm);
+        const matchesFilter = (filters.active && device.data.Status === "Active") ||
+            (filters.inactive && device.data.Status === "Inactive") ||
+            (!filters.active && !filters.inactive);
+        return matchesSearch && matchesFilter;
+    });
+
     return (
-        <div className="container mx-auto p-4">
+        <div>
             <header className="sticky top-0 z-30 py-5 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
                 <div className="flex items-center gap-2 text-lg font-semibold sm:text-base">
                     <NetworkIcon className="w-6 h-6" />
@@ -121,7 +141,7 @@ export default function Page() {
                 </div>
                 <div className="relative ml-auto flex-1 md:grow-0">
                     <div className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input type="search" placeholder="Search devices..." className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]" />
+                    <Input type="search" placeholder="Search devices..." value={searchTerm} onChange={handleSearchChange} className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]" />
                 </div>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -134,21 +154,13 @@ export default function Page() {
                         <DropdownMenuSeparator />
                         <DropdownMenuCheckboxItem checked={filters.active} onCheckedChange={(checked) => handleFilterChange("active", checked)}>Active</DropdownMenuCheckboxItem>
                         <DropdownMenuCheckboxItem checked={filters.inactive} onCheckedChange={(checked) => handleFilterChange("inactive", checked)}>Inactive</DropdownMenuCheckboxItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuRadioGroup value="latest">
-                            <DropdownMenuRadioItem value="latest">Latest</DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="oldest">Oldest</DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="name">Name</DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="mac">MAC Address</DropdownMenuRadioItem>
-                        </DropdownMenuRadioGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </header>
-            
-            <h1 className="text-2xl font-bold mb-6">Device Information</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {deviceData.map((device) => (
-                    <DeviceInfoCard key={device.id} macAddress={device.data["MAC Address"]} boardId={device.data["Room ID"]} />
+
+            <div className="flex flex-wrap justify-center gap-6">
+                {filteredDevices.map((device) => (
+                    <DeviceInfoCard key={device.id} macAddress={device.data["MAC Address"]} boardId={device.data["Room ID"]} students={device.data.Students} status={device.data.Status} />
                 ))}
             </div>
         </div>

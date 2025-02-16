@@ -23,7 +23,7 @@ export default function UserPage() {
     }, []);
 
     return (
-        <div className="flex justify-start flex-col items-center h-[75dvh] p-5">
+        <div className="flex justify-start flex-col items-center h-[75dvh]">
             <h1 className='text-4xl font-bold p-7'>User Dashboard</h1>
             <div className='flex gap-2'>
                 <DashboardCard title="Devices Connected" content={`The number of devices connected now is ${count}`} />
