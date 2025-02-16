@@ -7,7 +7,7 @@ import { realtimeDB } from "@/firebase/firebase";
 import { onValue, ref } from "firebase/database";
 import React, { useEffect, useState } from "react";
 import { DeviceInfoCard } from "@/components/DeviceInfoCard";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
 
 interface DeviceData {
     id: number;
@@ -30,32 +30,53 @@ interface SensorData {
     voltage: number;
 }
 
-interface ESPData{
+interface ESPData {
     "Room ID": number;
     "MAC Address": string;
+    Status: "Active" | "Inactive";
+    Students: number;
 }
 
 export default function Page() {
     const [deviceData, setDeviceData] = useState<DeviceData[]>([]);
+    const [filteredData, setFilteredData] = useState<DeviceData[]>([]);
     const [filters, setFilters] = useState({
-        active: true,
+        active: false,
         inactive: false,
     });
+    const [searchTerm, setSearchTerm] = useState("");
 
     // Handle filter changes
     const handleFilterChange = (type: string, checked: boolean) => {
         setFilters((prev) => {
             const newFilters = { ...prev };
-            if (type === "active") { 
-                newFilters.active = checked; 
+            if (type === "active") {
+                newFilters.active = checked;
             } else if (type === "inactive") {
                 newFilters.inactive = checked;
-            } else { }
+            }
             return newFilters;
         });
     };
 
-    // Filter devices based on selected filters
+    // Handle search term changes
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
+
+    // Filter devices based on selected filters and search term
+    useEffect(() => {
+        const filtered = deviceData.filter((device) => {
+            const matchesStatus =
+                (filters.active && device.data.Status === "Active") ||
+                (filters.inactive && device.data.Status === "Inactive");
+            const matchesSearch =
+                device.data["MAC Address"].toLowerCase().includes(searchTerm.toLowerCase()) ||
+                device.data["Room ID"].toString().includes(searchTerm);
+            return matchesStatus && matchesSearch;
+        });
+        setFilteredData(filtered);
+    }, [deviceData, filters, searchTerm]);
 
     useEffect(() => {
         const devicesRef = ref(realtimeDB, "/devices");
@@ -79,8 +100,10 @@ export default function Page() {
                                 voltage: 0,
                             },
                             data: (value as DeviceData).data || {
-                                roomID: 0,
-                                MAC_address: "",
+                                "Room ID": 0,
+                                "MAC Address": "",
+                                Status: "Inactive",
+                                Students: 0,
                             },
                         };
                     } else {
@@ -97,8 +120,10 @@ export default function Page() {
                                 voltage: 0,
                             },
                             data: {
-                                roomID: 0,
-                                MAC_address: "",
+                                "Room ID": 0,
+                                "MAC Address": "",
+                                Status: "Inactive",
+                                Students: 0,
                             },
                         };
                     }
@@ -113,14 +138,14 @@ export default function Page() {
     }, []); // Runs only once on mount
 
     return (
-        <div className="container mx-auto">
+        <div>
             <header className="sticky top-0 z-30 py-5 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
                 <div className="flex items-center gap-2 text-lg font-semibold sm:text-base">
                     <span className="text-2xl font-semibold">Analytics Dashboard</span>
                 </div>
                 <div className="relative ml-auto flex-1 md:grow-0 hidden sm:block">
                     <div className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input type="search" placeholder="Search devices..." className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]" />
+                    <Input type="search" placeholder="Search devices..." value={searchTerm} onChange={handleSearchChange} className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]" />
                 </div>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -134,20 +159,13 @@ export default function Page() {
                         <DropdownMenuCheckboxItem checked={filters.active} onCheckedChange={(checked) => handleFilterChange("active", checked)}>Active</DropdownMenuCheckboxItem>
                         <DropdownMenuCheckboxItem checked={filters.inactive} onCheckedChange={(checked) => handleFilterChange("inactive", checked)}>Inactive</DropdownMenuCheckboxItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuRadioGroup value="latest">
-                            <DropdownMenuRadioItem value="latest">Latest</DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="oldest">Oldest</DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="name">Name</DropdownMenuRadioItem>
-                            <DropdownMenuRadioItem value="mac">MAC Address</DropdownMenuRadioItem>
-                        </DropdownMenuRadioGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </header>
             
-            <h1 className="text-2xl font-bold p-2">Device Information</h1>
             <div className="flex flex-wrap justify-center gap-6">
-                {deviceData.map((device) => (
-                    <DeviceInfoCard key={device.id} macAddress={device.data["MAC Address"]} boardId={device.data["Room ID"]} analytics={true} />
+                {filteredData.map((device) => (
+                    <DeviceInfoCard key={device.id} macAddress={device.data["MAC Address"]} boardId={device.data["Room ID"]} analytics={true} status={device.data.Status} />
                 ))}
             </div>
         </div>
