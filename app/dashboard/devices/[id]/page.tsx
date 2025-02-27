@@ -39,7 +39,7 @@ const RelayToggle: React.FC<RelayToggleProps> = ({ relayNumber, isOn, onToggle }
     return (
         <div className="flex items-center justify-between">
             <p className="text-sm font-medium">Relay {relayNumber}</p>
-            <Switch id={`relay-${relayNumber}`} checked={isOn} onCheckedChange={onToggle} />
+            <Switch id={`relay-${relayNumber}`} checked={!isOn} onCheckedChange={onToggle} />
         </div>
     )
 }
