@@ -43,7 +43,7 @@ export default function DashboardLayout({ children }: LayoutProps) {
             <div className="flex h-[60px] items-center border-b px-6">
                 <Link className="flex items-center gap-2 font-semibold" href="#">
                     <LayoutDashboard className="h-6 w-6" />
-                    <span className="">{role === "admin" ? "Admin Dashboard" : "User Dashboard"}</span>
+                    <span className="">{role === "Admin" ? "Admin Dashboard" : "User Dashboard"}</span>
                 </Link>
             </div>
             <ScrollArea className="flex-1 px-3">
