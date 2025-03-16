@@ -39,12 +39,11 @@ interface ESPData {
 
 export default function Page() {
     const [deviceData, setDeviceData] = useState<DeviceData[]>([]);
-    const [filteredData, setFilteredData] = useState<DeviceData[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
     const [filters, setFilters] = useState({
         active: false,
         inactive: false,
     });
-    const [searchTerm, setSearchTerm] = useState("");
 
     // Handle filter changes
     const handleFilterChange = (type: string, checked: boolean) => {
@@ -63,20 +62,6 @@ export default function Page() {
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchTerm(event.target.value);
     };
-
-    // Filter devices based on selected filters and search term
-    useEffect(() => {
-        const filtered = deviceData.filter((device) => {
-            const matchesStatus =
-                (filters.active && device.data.Status === "Active") ||
-                (filters.inactive && device.data.Status === "Inactive");
-            const matchesSearch =
-                device.data["MAC Address"].toLowerCase().includes(searchTerm.toLowerCase()) ||
-                device.data["Room ID"].toString().includes(searchTerm);
-            return matchesStatus && matchesSearch;
-        });
-        setFilteredData(filtered);
-    }, [deviceData, filters, searchTerm]);
 
     useEffect(() => {
         const devicesRef = ref(realtimeDB, "/devices");
@@ -137,6 +122,16 @@ export default function Page() {
         return () => unsubscribe(); // Cleanup listener on unmount
     }, []); // Runs only once on mount
 
+    // Filter and search devices
+    const filteredDevices = deviceData.filter((device) => {
+        const matchesSearch = device.data["MAC Address"].toLowerCase().includes(searchTerm.toLowerCase()) ||
+            device.data["Room ID"].toString().includes(searchTerm);
+        const matchesFilter = (filters.active && device.data.Status === "Active") ||
+            (filters.inactive && device.data.Status === "Inactive") ||
+            (!filters.active && !filters.inactive);
+        return matchesSearch && matchesFilter;
+    });
+
     return (
         <div>
             <header className="sticky top-0 z-30 py-5 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
@@ -164,8 +159,8 @@ export default function Page() {
             </header>
             
             <div className="flex flex-wrap justify-center gap-6">
-                {filteredData.map((device) => (
-                    <DeviceInfoCard key={device.id} macAddress={device.data["MAC Address"]} boardId={device.data["Room ID"]} analytics={true} status={device.data.Status} />
+                {filteredDevices.map((device) => (
+                    <DeviceInfoCard key={device.id} macAddress={device.data["MAC Address"]} boardId={device.data["Room ID"]} students={device.data.Students} analytics={true} status={device.data.Status} />
                 ))}
             </div>
         </div>
