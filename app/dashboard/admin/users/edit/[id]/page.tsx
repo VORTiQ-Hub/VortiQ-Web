@@ -51,7 +51,7 @@ export default function Page() {
                 updated_at: serverTimestamp(),
             };
             await updateDoc(dataRef, response);
-            router.push('/admin/customers');
+            router.push('/dashboard/admin/users');
         } catch (error) {
             console.error("Error Updating Customer", error);
             // Optionally, show an error message to the user

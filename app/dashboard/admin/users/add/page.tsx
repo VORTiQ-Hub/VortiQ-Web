@@ -19,7 +19,7 @@ export default function AdminCustomersAddPage() {
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | undefined>(undefined);
     const [success, setSuccess] = useState<string | undefined>(undefined);
-    const Router = useRouter();
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof RegisterSchema>>({
         resolver: zodResolver(RegisterSchema),
@@ -42,6 +42,7 @@ export default function AdminCustomersAddPage() {
                         console.log(response.error);
                     } else {
                         setSuccess(response.success);
+                        router.push('/dashboard/admin/users');
                     }
                 })
                 .catch((err) => {

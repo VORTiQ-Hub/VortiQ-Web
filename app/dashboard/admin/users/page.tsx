@@ -65,7 +65,7 @@ export default function AdminCustomersPage() {
     // Edit User
     const editUser = (id: string) => {
         console.log("Edit User", id);
-        router.push(`/admin/customers/edit/${id}`);
+        router.push(`/dashboard/admin/users/edit/${id}`);
     }
 
     return (
@@ -74,7 +74,7 @@ export default function AdminCustomersPage() {
                 <div></div>
                 <h1 className='text-2xl font-semibold text-center'>Customers</h1>
                 <div className="text-end">
-                    <Button type="button" onClick={() => router.push('/admin/customers/add')} className="text-end gap-2"><UserPlus />Add Customer</Button>
+                    <Button type="button" onClick={() => router.push('/dashboard/admin/users/add')} className="text-end gap-2"><UserPlus />Add Customer</Button>
                 </div>
             </div>
             {data && data.length === 0 && (
