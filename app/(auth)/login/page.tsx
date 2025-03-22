@@ -119,10 +119,10 @@ export default function LoginPage() {
                         <div className="flex items-center justify-around text-sm gap-4">
                             <Button variant="link" className="px-0 text-[#0077b6] dark:text-[#00b4d8]" onClick={handleForgotPassword} disabled={!email}> Forgot password? </Button>
                         </div>
-                        <div className="text-center text-sm">
+                        {/* <div className="text-center text-sm">
                             Don&apos;t have an account?{" "}
                             <Link href="/register" className="text-[#0077b6] hover:underline dark:text-[#00b4d8]"> Create an account </Link>
-                        </div>
+                        </div> */}
                     </CardFooter>
                 </form>
             </Card>
